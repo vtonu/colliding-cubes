@@ -51,9 +51,9 @@ const ConnectingCube: React.FC<{
 
   return (
     <mesh ref={meshRef} position={position} scale={scale} rotation={rotation}>
-      {/* Box to represent the connecting cubes */}
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="#000000" />
+      {/* Black Boxes Size */}
+      <boxGeometry args={[1, 1, 0.2]} />
+      <meshStandardMaterial color="green" />
     </mesh>
   );
 };
@@ -65,9 +65,21 @@ const Scene: React.FC = () => {
   // Define the positions and properties of the cubes
   const cubes: CubeProps[] = useMemo(
     () => [
-      { position: [-2, 0, 0], size: 1.5, color: '#00ff00' },
-      { position: [2, 0, 0], size: 1.5, color: '#00ff00' },
-      { position: [0, 2, 0], size: 1.5, color: '#000000' },
+      // The 2 big cubes left and right
+      { position: [-2, 0, 0], size: 1, color: '#00ff33' }, // Green
+      { position: [2, 0, 0], size: 1, color: '#00ff33' }, // Green
+
+      // Top Cubes
+      { position: [0, 0.2, 0], size: 0.1, color: '#00ff00' }, // Green
+      { position: [0, 0.4, 0], size: 0.2, color: '#00ff00' }, // Green
+      { position: [0, 0.7, 0], size: 0.3, color: '#00ff00' }, // Green
+      { position: [0, 1.1, 0], size: 0.4, color: '#00ff00' }, // Green
+
+      // Bottom Cubes
+      { position: [0, -0.2, 0], size: 0.1, color: '#00ff00' }, // Green
+      { position: [0, -0.4, 0], size: 0.2, color: '#00ff00' }, // Green
+      { position: [0, -0.7, 0], size: 0.3, color: '#00ff00' }, // Green
+      { position: [0, -1.1, 0], size: 0.4, color: '#00ff00' }, // Green
     ],
     [],
   );
@@ -76,7 +88,7 @@ const Scene: React.FC = () => {
   useFrame((state, delta) => {
     if (groupRef.current) {
       // Rotating the group around the Z axis
-      groupRef.current.rotation.z += delta * 0.1;
+      groupRef.current.rotation.y += delta * 0.1;
     }
   });
 
@@ -89,16 +101,33 @@ const Scene: React.FC = () => {
           <Cube key={index} position={cube.position} size={cube.size} color={cube.color} />
         ))}
         {/* Render connecting cubes */}
-        <ConnectingCube start={[-2, 0, 0]} end={[2, 0, 0]} size={0.5} />
-        <ConnectingCube start={[0, 2, 0]} end={[-2, 0, 0]} size={0.5} />
-        <ConnectingCube start={[0, 2, 0]} end={[2, 0, 0]} size={0.5} />
-        <ConnectingCube start={[0, 2, 0]} end={[0, 0, 0]} size={0.5} />
+
+        {/* Connecting all, center kinda */}
+        <ConnectingCube start={[-0.2, 0, 0]} end={[0.2, 0, 0]} size={0.2} />
+
+        {/* The 2 big cubes left and right */}
+        <ConnectingCube start={[0, 0, 0]} end={[-2, 0, 0]} size={1.2} />
+        <ConnectingCube start={[0, 0, 0]} end={[2, 0, 0]} size={1.2} />
+
+        {/* Left */}
+        <ConnectingCube start={[0, 0, 0]} end={[0.2, 0, 0]} size={0.1} />
+        <ConnectingCube start={[0, 0, 0]} end={[0.4, 0, 0]} size={0.1} />
+        <ConnectingCube start={[0, 0, 0]} end={[0.6, 0, 0]} size={0.1} />
+        <ConnectingCube start={[0, 0, 0]} end={[0.8, 0, 0]} size={0.1} />
+        <ConnectingCube start={[0, 0, 0]} end={[1, 0, 0]} size={0.1} />
+
+        {/* Right */}
+        <ConnectingCube start={[0, 0, 0]} end={[-0.2, 0, 0]} size={0.1} />
+        <ConnectingCube start={[0, 0, 0]} end={[-0.4, 0, 0]} size={0.1} />
+        <ConnectingCube start={[0, 0, 0]} end={[-0.6, 0, 0]} size={0.1} />
+        <ConnectingCube start={[0, 0, 0]} end={[-0.8, 0, 0]} size={0.1} />
+        <ConnectingCube start={[0, 0, 0]} end={[-1, 0, 0]} size={0.1} />
       </group>
       {/* OrbitControls to allow camera rotation with the mouse */}
       <OrbitControls
         enableZoom={true} // Enable zooming
-        maxDistance={10} // Maximum zoom distance
-        minDistance={2} // Minimum zoom distance
+        maxDistance={5} // Maximum zoom distance
+        minDistance={1} // Minimum zoom distance
         enablePan={false} // Disable panning
       />
     </>
@@ -110,14 +139,12 @@ const ConnectedCubes: React.FC = () => {
   return (
     <Canvas
       style={{
-        width: '100%', // Full width of parent container
-        height: '420px', // Fixed height
+        width: '100%',
+        height: '420px',
       }}
-      className="rounded-md">
-      {/* Ambient light to illuminate the scene */}
-      <ambientLight intensity={0.5} />
-      {/* Directional light for added depth and shadow */}
-      <directionalLight position={[5, 5, 5]} intensity={1} />
+      className="rounded-md bg-black">
+      <ambientLight intensity={0.3} />
+      <directionalLight position={[5, 5, 55]} intensity={1} />
       <Scene />
     </Canvas>
   );

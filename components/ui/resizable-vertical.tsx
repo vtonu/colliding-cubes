@@ -1,3 +1,4 @@
+'use client';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
 import { ModeToggle } from './toggle-button';
@@ -11,10 +12,10 @@ export function ResizableVertical() {
       <ResizablePanel defaultSize={25}>
         <div className="flex h-full items-center justify-center">
           <span className="font-semibold flex justify-center items-center gap-2">
-            <Button variant="default" size="sm">
+            <Button variant="secondary" size="sm">
               Start
             </Button>
-            <Button variant="secondary" size="sm">
+            <Button variant="secondary" size="sm" onClick={() => window.location.reload()}>
               Refresh
             </Button>
             <ModeToggle />
