@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Card } from '@/components/ui/card';
 import CollidingCubes from './CollidingCubes';
+import ConnectedCubes from './MeshCubes';
 
 export function BlackCard() {
   return (
@@ -8,7 +9,8 @@ export function BlackCard() {
       <main className="flex flex-col items-center justify-center p-6 space-y-4 font-sans font-normal">
         This canvas is used to display the cubes and their information.
         <br></br>
-        <CollidingCubes />
+        <ConnectedCubes />
+        {/* <CollidingCubes /> */}
       </main>
     </Card>
   );
