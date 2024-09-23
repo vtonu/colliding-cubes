@@ -1,7 +1,7 @@
 // Import necessary hooks and components from React and Three.js libraries
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Line } from '@react-three/drei'; // Import Line from drei
+import { OrbitControls, Line, Trail } from '@react-three/drei'; // Import Line from drei
 import * as THREE from 'three';
 
 // Define the gradient shader material for cubes
@@ -9,7 +9,7 @@ const GradientShaderMaterial = {
   uniforms: {
     time: { value: 0 }, // Add time uniform for animation
     color1: { value: new THREE.Color('#00ff00') }, // Start color (green)
-    color2: { value: new THREE.Color('#000000') }, // End color (black)
+    color2: { value: new THREE.Color('#008000') }, // End color (black)
   },
   vertexShader: `
     varying vec2 vUv;
@@ -24,7 +24,7 @@ const GradientShaderMaterial = {
     uniform vec3 color2;
     varying vec2 vUv;
     void main() {
-      vec3 color = mix(color2, color1, vUv.y * 0.9 + 0.1 + sin(time) * 0.5); // Animate the gradient
+      vec3 color = mix(color2, color1, vUv.y * 0.9 + 0.1 + sin(time) * 0.2); // Animate the gradient
       gl_FragColor = vec4(color, 1.0);
     }
   `,
@@ -76,14 +76,16 @@ function CubeWithLine({ position }: CubeWithLineProps) {
         points={[new THREE.Vector3(...position), centralPoint]} // Start at cube position, end at central point
         lineWidth={2} // Line width
         scale={1} // Scale the line
+        /* vertexColors={[[1, 1, 1]]} // Optional array of RGB values for each point */
+        color={'#008000'} // Line color
       >
         <shaderMaterial
           ref={lineMaterialRef}
           attach="material"
           uniforms={{
-            time: { value: 0 },
+            time: { value: 1 },
             color1: { value: new THREE.Color('#00ff00') },
-            color2: { value: new THREE.Color('#000000') },
+            color2: { value: new THREE.Color('#008000') },
           }}
           vertexShader={GradientShaderMaterial.vertexShader}
           fragmentShader={GradientShaderMaterial.fragmentShader}
