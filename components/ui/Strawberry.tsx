@@ -35,7 +35,7 @@ export default function StrawberryVisualization() {
       const strawberryDotColors = [];
       const strawberryColor = new THREE.Color();
 
-      for (let i = 0; i < 2000; i++) {
+      for (let i = 0; i < 1500; i++) {
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
         let x = Math.sin(phi) * Math.cos(theta);
@@ -144,11 +144,66 @@ export default function StrawberryVisualization() {
       return new THREE.Points(leafDotGeometry, leafDotMaterial);
     };
 
-    // Add strawberry dots and leaves to scene
+    // Function to create seeds
+    const createStrawberrySeeds = () => {
+      const seedDotGeometry = new THREE.BufferGeometry();
+      const seedDotMaterial = new THREE.PointsMaterial({ size: 0.02, vertexColors: true });
+
+      const seedDotPositions = [];
+      const seedDotColors = [];
+      const seedColor = new THREE.Color();
+
+      for (let i = 0; i < 100; i++) {
+        // Reduced the amount of seeds
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        let x = Math.sin(phi) * Math.cos(theta);
+        let y = Math.cos(phi);
+        let z = Math.sin(phi) * Math.sin(theta);
+
+        // Adjust the shape to follow the strawberry dots
+        y = y * 1.2 - 0.1;
+        const r = Math.sqrt(x * x + z * z);
+        y *= 1 - r * 0.5; // Taper bottom part
+
+        if (y < 0) {
+          x *= 1.2;
+          z *= 1.2;
+        }
+        if (y > 0) {
+          x *= 1.2;
+          z *= 1.2;
+        }
+
+        seedDotPositions.push(x * 0.8, y, z * 0.8);
+
+        // Randomly alternate between white and green for seeds
+        if (Math.random() > 0.5) {
+          seedColor.setRGB(1, 1, 1); // White
+        } else {
+          seedColor.setHSL(0.3, 0.8, 0.5); // Green
+        }
+
+        seedDotColors.push(seedColor.r, seedColor.g, seedColor.b);
+      }
+
+      // Assign positions and colors to geometry
+      seedDotGeometry.setAttribute(
+        'position',
+        new THREE.Float32BufferAttribute(seedDotPositions, 3),
+      );
+      seedDotGeometry.setAttribute('color', new THREE.Float32BufferAttribute(seedDotColors, 3));
+
+      return new THREE.Points(seedDotGeometry, seedDotMaterial);
+    };
+
+    // Add strawberry dots, seeds, and leaves to scene
     const strawberryDots = createStrawberryDots();
     const leafDots = createLeaves();
+    const seedDots = createStrawberrySeeds();
     scene.add(strawberryDots);
     scene.add(leafDots);
+    scene.add(seedDots);
 
     // Animation loop
     const animate = () => {
@@ -156,6 +211,7 @@ export default function StrawberryVisualization() {
         requestAnimationFrame(animate);
         strawberryDots.rotation.y += 0.005;
         leafDots.rotation.y += 0.005;
+        seedDots.rotation.y += 0.005; // Animate seeds as well
         controls.update();
         renderer.render(scene, camera);
       }, 1000 / 30); // 30 FPS
