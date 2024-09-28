@@ -10,9 +10,9 @@ export function BlackCard() {
       <main className="flex flex-col items-center justify-center p-6 space-y-4 font-sans font-normal">
         This canvas is used to display my three.js visuals.
         <br></br>
-        <StrawberryVisualization />
-        {/*  <ConnectedCubes />
-        <CollidingCubes /> */}
+        {/* <StrawberryVisualization /> */}
+        <ConnectedCubes />
+        {/*  <CollidingCubes /> */}
       </main>
     </Card>
   );
