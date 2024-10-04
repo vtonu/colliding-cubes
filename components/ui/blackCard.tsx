@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { Card } from '@/components/ui/card';
-import CollidingCubes from './CollidingCubes';
-import ConnectedCubes from './MeshCubes';
 import StrawberryVisualization from './Strawberry';
 import ParticleEdges from './X';
 
@@ -12,9 +10,7 @@ export function BlackCard() {
         This canvas is used to display my three.js visuals.
         <br></br>
         {/* <StrawberryVisualization /> */}
-        {/* <ConnectedCubes /> */}
         <ParticleEdges />
-        {/*  <CollidingCubes /> */}
       </main>
     </Card>
   );

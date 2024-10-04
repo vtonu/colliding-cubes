@@ -13,7 +13,7 @@ interface ParticleEdgesProps {
 }
 
 // Component to render a particle cloud around the X-shape
-function ParticleCloud({ count = 500, radius = 5 }) {
+function ParticleCloud({ count = 500, radius = 10 }) {
   const particles = useRef<THREE.Points>(null!); // Reference for particle cloud to animate later
 
   // Memoize particle cloud positions to optimize performance
@@ -34,6 +34,7 @@ function ParticleCloud({ count = 500, radius = 5 }) {
   useFrame((state, delta) => {
     particles.current.rotation.x += delta * 0.05;
     particles.current.rotation.y += delta * 0.075;
+    particles.current.rotation.z += delta * 0.1;
   });
 
   return (
@@ -46,7 +47,7 @@ function ParticleCloud({ count = 500, radius = 5 }) {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial size={0.02} color="white" transparent opacity={0.6} />{' '}
+      <pointsMaterial size={0.02} color="darkgray" transparent opacity={0.5} />{' '}
       {/* Semi-transparent white particles */}
     </points>
   );
@@ -59,20 +60,19 @@ function XShape() {
 
   // Animate the entire X-shape rotation over time
   useFrame((state, delta) => {
-    groupRef.current.rotation.x += delta * 0.1;
-    groupRef.current.rotation.y += delta * 0.15;
+    groupRef.current.rotation.y += delta * 0.25;
   });
 
   return (
     <group ref={groupRef}>
       {/* First box for the X, rotated by 45 degrees */}
       <mesh rotation={[0, 0, Math.PI / 4]}>
-        <boxGeometry args={[4, 0.4, 0.4]} />
-        <meshBasicMaterial color="darkgray" wireframe /> {/* Lime color, wireframe mode */}
+        <boxGeometry args={[4, 0.2, 0.4]} />
+        <meshBasicMaterial color="gray" wireframe />
       </mesh>
       {/* Second box for the X, rotated by -45 degrees */}
       <mesh rotation={[0, 0, -Math.PI / 4]}>
-        <boxGeometry args={[4, 0.4, 0.4]} />
+        <boxGeometry args={[4, 0.6, 0.4]} />
         <meshBasicMaterial color="darkgray" wireframe />
       </mesh>
       {/* Add particle effects along the edges and a surrounding particle cloud */}
@@ -86,7 +86,7 @@ function XShape() {
 function Ground() {
   const texture = useTexture('./universe.jpg'); // Load the universe texture
   return (
-    <Plane args={[10, 10]} rotation-x={-Math.PI / 2} position={[0, -2, 0]} receiveShadow>
+    <Plane args={[8, 8]} rotation-x={-Math.PI / 2} position={[0, -2, 0]} receiveShadow>
       <meshStandardMaterial map={texture} /> {/* Apply texture to the ground */}
     </Plane>
   );
@@ -108,7 +108,7 @@ export default function Component() {
         {/* Add lighting and controls */}
         <pointLight position={[5, 5, 5]} intensity={1} castShadow />
         <ambientLight intensity={0.2} />
-        <OrbitControls enableZoom={true} maxDistance={12} minDistance={5} />{' '}
+        <OrbitControls enableZoom={true} maxDistance={13} minDistance={5} />{' '}
         {/* Controls for rotating and zooming */}
       </Canvas>
     </div>
